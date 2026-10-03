@@ -1609,12 +1609,6 @@ window.closePomodoroModal = function() {
                 if (pagesView) pagesView.style.display = 'flex';
                 this.renderCurrentDay();
             }
-
-            if (window.showCozyToast) {
-                setTimeout(() => {
-                    window.showCozyToast("💡 İpucu: Kopyaladığınız görselleri (Ctrl+V) doğrudan sayfaya yapıştırabilirsiniz!");
-                }, 400);
-            }
         }
 
         goToCover() {
