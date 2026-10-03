@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cozy Botanical Journal & Garden</title>
+    <meta name="description" content="Goodnotes Digital Planner & Voxel Farm Garden.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Fredoka:wght@600;700&family=Gaegu:wght@700&family=Marcellus&family=Outfit:wght@400;500;600;700&family=Shantell+Sans:wght@700;800&family=Sniglet:wght@800&display=swap" rel="stylesheet">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css?v=5.6">
+</head>
+    <!-- Main Interactive Layer: Garden Screen / Floating Island Scene -->
+    <div id="gardenScreen" class="farm-scene-container garden-screen">
+        <!-- Little Garden Diary Clean Logo Header -->
+        <div class="garden-main-title-header">
+            <img src="assets/title_logo.png?v=5.6" alt="Little Garden Diary" class="garden-title-logo-img" />
+        </div>
+
+        <!-- Floating Organic Single Island -->
+        <div id="floatingIsland" class="floating-island">
+            <img id="singleAdaImg" src="ada.png" class="single-ada-img" alt="Cozy Organik Ada" />
+
+            <!-- Flowers Layer on Island -->
+            <div id="islandFlowersContainer" class="island-flowers-container"></div>
+        </div>
+
+        <!-- Weather Overlay -->
+        <div id="weatherOverlay" class="weather-overlay"></div>
+    </div>
+
+    <!-- Top HUD Navigation -->
+    <header class="top-hud">
+        <!-- Rustic Wooden Hanging Sign (Left) -->
+        <div class="rustic-wooden-sign" id="woodenSign">
+            <div class="sign-rope rope-left"></div>
+            <div class="sign-rope rope-right"></div>
+            <div class="sign-board">
+                <span id="hudWeatherIcon" class="sign-weather-icon" title="Current Atmosphere">☀️</span>
+                <div class="sign-date-wrapper">
+                    <span class="sign-subtitle">TODAY'S GARDEN</span>
+                    <span id="hudDateText" class="sign-date-text">12 Sep 2026</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right HUD Controls -->
+        <div class="hud-right-actions">
+            <!-- Ambient Nature Sound Toggle -->
+            <button id="ambientAudioBtn" class="hud-audio-btn" title="Toggle Nature Ambient Sound">
+                <span id="audioIcon">🔊</span>
+            </button>
+            <!-- Energy Profile Setup Button -->
+            <button id="energyRhythmBtn" class="seed-pouch-btn energy-hud-btn" onclick="window.openEnergyModal()" title="Enerji Ritmi & Biyolojik Saat">
+                <div class="pouch-icon">⚡</div>
+                <div class="pouch-label">
+                    <span class="pouch-title">Enerji Ritmi</span>
+                    <span class="pouch-sub">Biyolojik Saat</span>
+                </div>
+            </button>
+            <!-- Panda Pomodoro Button -->
+            <button id="pomodoroHudBtn" class="seed-pouch-btn pomodoro-hud-btn" onclick="window.openPomodoroModal()" title="Panda Pomodoro Zamanlayıcısı">
+                <div class="pouch-icon">🍅</div>
+                <div class="pouch-label">
+                    <span class="pouch-title">Pomodoro</span>
+                    <span class="pouch-sub">Panda Timer</span>
+                </div>
+            </button>
+            <!-- Plant Seed Quick Action Button -->
+            <button id="plantSeedBtn" class="seed-pouch-btn" onclick="window.openPlantModal()" title="Plant a new task seed!">
+                <div class="pouch-icon">🌱</div>
+                <div class="pouch-label">
+                    <span class="pouch-title">Plant Seed</span>
+                    <span class="pouch-sub">+ Quick Task</span>
+                </div>
+            </button>
+        </div>
+    </header>
+
+    <!-- Bottom-Right HUD: Floating Leather Journal Button -->
+    <div class="bottom-right-hud">
+        <button id="floatingJournalBtn" class="floating-journal-btn" onclick="window.openJournal()" title="Open Digital Planner">
+            <div class="journal-clover-motif">🍀</div>
+            <span class="journal-btn-label">Journal</span>
+            <div id="unreadJournalBadge" class="unread-badge" style="display:none;" title="Write your thoughts for today!">
+                !
+            </div>
+        </button>
+    </div>
+
+    <!-- Quick Plant Seed Modal -->
+    <div id="plantModal" class="modal-backdrop">
+        <div class="modal-card plant-modal-card">
+            <button id="closePlantModalBtn" class="modal-close-x" onclick="window.closePlantModal()">&times;</button>
+            <div class="modal-header">
+                <span class="modal-icon">🌱</span>
+                <h3>Plant a New Seed</h3>
+            </div>
+            <form id="plantSeedForm">
+                <div class="form-group">
+                    <label for="quickTaskTitle">What task would you like to grow?</label>
+                    <input type="text" id="quickTaskTitle" placeholder="e.g., Read 30 mins, Drink chamomile tea..." required />
+                </div>
+                <div class="form-group">
+                    <label for="quickTaskCategory">Flower Category:</label>
+                    <select id="quickTaskCategory">
+                        <option value="routine">🌼 Rutin</option><option value="shopping">🛒 Alışveriş (Kırmızı)</option><option value="food">🍔 Yemek (Mavi)</option>
+                        <option value="work">🌻 Work (Sunflower)</option>
+                        <option value="self-care">🪻 Self-Care (Lavender)</option>
+                        <option value="deep-focus">🌺 Deep Focus (Poppy)</option>
+                        <option value="creative">🌸 Creative (Pink Blossom)</option>
+                    </select>
+                </div>
+                <button type="submit" class="cozy-btn-large">
+                    🌱 Sow Seed in Garden
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 3D Accordion Notebook Modal Structure -->
+    <div id="journalModal" class="journal-modal">
+        <!-- 1. KAPALI KAPAK EKRANI (Kedi Temalı Ajanda Kapağı) -->
+        <div id="bookCoverView" class="book-cover-view">
+            <div class="single-cover-book" id="singleCoverBook" onclick="window.openBookPages()">
+                <div class="cover-content" id="coverCanvas">
+                    <div class="cover-spine-edge"></div>
+                    
+                    <!-- Sarı Alanda Düzenlenebilir Yazı Alanı -->
+                    <div class="cover-yellow-title-area" onclick="event.stopPropagation()">
+                        <textarea id="coverTitleInput" class="cover-title-input" placeholder="Ajanda Başlığını Buraya Yaz..." rows="2" onclick="event.stopPropagation()" onfocus="event.stopPropagation()">COZY JOURNAL 2026</textarea>
+                    </div>
+
+                    <!-- Defteri Aç Butonu -->
+                    <div class="cover-click-open-btn">
+                        <button class="pomo-pulse-hint" onclick="event.stopPropagation(); window.openBookPages();">
+                            
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. AÇIK DEFTER EKRANI (Başlangıçta display: none OLACAK!) -->
+        <div id="bookPagesView" class="book-pages-view" style="display: none;">
+            <!-- Goodnotes Toolbar -->
+            <div class="goodnotes-toolbar">
+                <div class="dropdown-wrapper">
+                    <button id="btnText" class="tool-btn">✏️ Metin</button>
+                    <div id="textColorMenu" class="dropdown-popover hidden">
+                        <div class="popover-title">Metin Rengi</div>
+                        <div class="toolbar-color-grid">
+                            <button class="tb-color-opt" data-color="#3b2518" style="background:#3b2518; color:#fff;">Kahverengi</button>
+                            <button class="tb-color-opt" data-color="#992222" style="background:#992222; color:#fff;">Kırmızı</button>
+                            <button class="tb-color-opt" data-color="#2e6930" style="background:#2e6930; color:#fff;">Yeşil</button>
+                            <button class="tb-color-opt" data-color="#1b3b6f" style="background:#1b3b6f; color:#fff;">Lacivert</button>
+                            <button class="tb-color-opt" data-color="#b3547a" style="background:#b3547a; color:#fff;">Pembe</button>
+                            <button class="tb-color-opt" data-color="#b86d29" style="background:#b86d29; color:#fff;">Kehribar</button>
+                        </div>
+                        <div class="popover-title" style="margin-top: 8px;">Yazı Tipi (Font)</div>
+                        <div class="toolbar-font-grid">
+                            <button class="tb-font-opt active" data-font="'Caveat', cursive">✒️ El Yazısı</button>
+                            <button class="tb-font-opt" data-font="'Fredoka', sans-serif">🎨 Şirin Sans</button>
+                            <button class="tb-font-opt" data-font="'Marcellus', serif">📜 Klasik Serif</button>
+                            <button class="tb-font-opt" data-font="'Shantell Sans', cursive">🌸 Oyuncu Not</button>
+                            <button class="tb-font-opt" data-font="'Gaegu', cursive">✏️ Kore Tipi</button>
+                        </div>
+                    </div>
+                </div>
+                <button id="btnPhoto" class="tool-btn">📷 Fotoğraf</button>
+                <input type="file" id="photoInput" accept="image/*" style="display:none">
+                <button id="btnTask" class="tool-btn">📌 Görev</button>
+
+                <!-- Advanced Pen & Drawing Toolbar -->
+                <div class="dropdown-wrapper">
+                    <button id="btnPen" class="tool-btn pen-tool-toggle-btn">🖊️ Kalem</button>
+                    <div id="penMenu" class="dropdown-popover hidden pen-popover-menu">
+                        <div class="popover-title">Kalem Ucu Seçimi</div>
+                        <div class="pen-types-row">
+                            <button class="pen-type-btn active" data-type="fountain" title="Dolma Kalem">🖋️ Dolma</button>
+                            <button class="pen-type-btn" data-type="felt" title="Keçeli Kalem">🖊️ Keçeli</button>
+                            <button class="pen-type-btn" data-type="highlighter" title="Fosforlu Kalem">🖍️ Fosforlu</button>
+                            <button class="pen-type-btn" data-type="eraser" title="Silgi Modu">🧹 Silgi</button>
+                        </div>
+                        
+                        <div class="popover-title" style="margin-top: 8px;">Kalem Rengi</div>
+                        <div class="pen-colors-swatch-grid">
+                            <span class="pen-color-dot active" data-color="#2b1d14" style="background:#2b1d14;" title="Mürekkep Siyahı"></span>
+                            <span class="pen-color-dot" data-color="#8eaf7a" style="background:#8eaf7a;" title="Adaçayı Yeşili"></span>
+                            <span class="pen-color-dot" data-color="#e49286" style="background:#e49286;" title="Somon"></span>
+                            <span class="pen-color-dot" data-color="#a89ac4" style="background:#a89ac4;" title="Leylak"></span>
+                            <span class="pen-color-dot" data-color="#d99bb0" style="background:#d99bb0;" title="Pudra Pembe"></span>
+                            <span class="pen-color-dot" data-color="#e2b85c" style="background:#e2b85c;" title="Hardal Sarı"></span>
+                            <span class="pen-color-dot" data-color="#a0522d" style="background:#a0522d;" title="Tarçın"></span>
+                            <span class="pen-color-dot" data-color="#4a8282" style="background:#4a8282;" title="Okyanus Yeşili"></span>
+                            <span class="pen-color-dot" data-color="#fff176" style="background:#fff176;" title="Fosforlu Sarı"></span>
+                            <span class="pen-color-dot" data-color="#ffb74d" style="background:#ffb74d;" title="Neon Şeftali"></span>
+                            <label class="custom-color-picker-label" title="Özel Renk Seç">
+                                🎨 <input type="color" id="penCustomColorPicker" value="#2b1d14" />
+                            </label>
+                        </div>
+                        
+                        <div class="popover-title" style="margin-top: 8px;">Boyut & Opaklık</div>
+                        <div class="pen-sliders-container">
+                            <div class="pen-slider-row">
+                                <label for="penSizeSlider">Boyut: <span id="penSizeVal">4px</span></label>
+                                <input type="range" id="penSizeSlider" min="1" max="40" value="4" step="1" />
+                            </div>
+                            <div class="pen-slider-row">
+                                <label for="penOpacitySlider">Opaklık: <span id="penOpacityVal">%100</span></label>
+                                <input type="range" id="penOpacitySlider" min="0.1" max="1.0" value="1.0" step="0.05" />
+                            </div>
+                        </div>
+
+                        <div class="popover-title" style="margin-top: 8px;">Çizim Geçmişi</div>
+                        <div class="pen-actions-row">
+                            <button id="btnUndoDraw" class="pen-action-btn" title="Geri Al (Ctrl+Z)">↩️ Geri Al</button>
+                            <button id="btnRedoDraw" class="pen-action-btn" title="İleri Al (Ctrl+Y)">↪️ İleri Al</button>
+                            <button id="btnClearDraw" class="pen-action-btn danger" title="Tüm Çizimleri Temizle">🗑️ Temizle</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Washi Tape & Paperclip Dropdown -->
+                <div class="dropdown-wrapper">
+                    <button id="btnWashi" class="tool-btn">🏷️ Tape & Klips</button>
+                    <div id="washiMenu" class="dropdown-popover hidden">
+                        <div class="popover-title">Washi Tape Desenleri</div>
+                        <div class="washi-options-grid">
+                            <button class="washi-opt-btn pattern-polka" data-pattern="polka">Puantiyeli</button>
+                            <button class="washi-opt-btn pattern-gingham" data-pattern="gingham">Pötikare</button>
+                            <button class="washi-opt-btn pattern-floral" data-pattern="floral">Çiçekli</button>
+                            <button class="washi-opt-btn pattern-kraft" data-pattern="kraft">Kraft Maskeleme</button>
+                        </div>
+                        <div class="popover-title" style="margin-top: 8px;">Ataş & Efektler</div>
+                        <button id="addPaperclipBtn" class="stamp-opt">📎 Pirinç Ataş Ekle/Kaldır</button>
+                        <button id="toggleTornBtn" class="stamp-opt">✂️ Yırtık Kenar Efekti</button>
+                    </div>
+                </div>
+
+                <div class="dropdown-wrapper">
+                    <button id="btnSticker" class="tool-btn">🎨 Sticker & Mood</button>
+                    <div id="stickerMenu" class="dropdown-popover hidden">
+                        <div class="popover-title">Stickerlar</div>
+                        <div class="sticker-grid">
+                            <span class="sticker-opt" data-emoji="🌿">🌿</span>
+                            <span class="sticker-opt" data-emoji="☕">☕</span>
+                            <span class="sticker-opt" data-emoji="☀️">☀️</span>
+                            <span class="sticker-opt" data-emoji="🌸">🌸</span>
+                            <span class="sticker-opt" data-emoji="🦋">🦋</span>
+                            <span class="sticker-opt" data-emoji="💌">💌</span>
+                            <span class="sticker-opt" data-emoji="🍓">🍓</span>
+                            <span class="sticker-opt" data-emoji="🍀">🍀</span>
+                            <span class="sticker-opt" data-emoji="🐝">🐝</span>
+                        </div>
+                        <div class="popover-title" style="margin-top: 8px;">Ruh Hali Mührü</div>
+                        <div class="stamp-grid">
+                            <button class="stamp-opt" data-mood="energetic" data-emoji="☀️" data-label="Güneşli">☀️ Güneşli</button>
+                            <button class="stamp-opt" data-mood="calm" data-emoji="🫖" data-label="Sakin">🫖 Sakin</button>
+                            <button class="stamp-opt" data-mood="focused" data-emoji="🌱" data-label="Odak">🌱 Odaklı</button>
+                            <button class="stamp-opt" data-mood="melancholy" data-emoji="🌧️" data-label="Yağmurlu">🌧️ Yağmurlu</button>
+                            <button class="stamp-opt" data-mood="creative" data-emoji="🌸" data-label="Yaratıcı">🌸 Yaratıcı</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dropdown-wrapper">
+                    <button id="btnPaper" class="tool-btn">📄 Kağıt</button>
+                    <div id="paperMenu" class="dropdown-popover hidden">
+                        <button data-type="dotted" class="paper-opt">Noktalı</button>
+                        <button data-type="lined" class="paper-opt">Çizgili</button>
+                        <button data-type="blank" class="paper-opt">Düz</button>
+                        <button data-type="grid" class="paper-opt">Kareli</button>
+                    </div>
+                </div>
+
+                <button onclick="window.closeToCover()" class="tool-btn">📕 Kapağa Dön</button>
+                <button id="btnExport" class="tool-btn" title="Anı Kartı Olarak İndir">📸 Dışa Aktar</button>
+                <button id="btnDelete" class="tool-btn danger-btn" title="Seçili Ögeyi Sil">🗑️ Sil</button>
+                <button id="btnCloseJournal" class="tool-btn close-btn" onclick="window.closeJournal()">✕ Kapat</button>
+            </div>
+
+            <!-- 3D Accordion Book Stage -->
+            <div class="book-scene is-open" id="bookScene">
+                <!-- Inner Book Pages Container with Fan/Stack Edges & Monthly Bookmark Tabs -->
+                <div class="book-container" id="bookContainer">
+                    <div class="fan-edge fan-edge-left"></div>
+                    <div id="pageLeft" class="notebook-page paper-dotted"></div>
+                    <div class="book-spine">
+                        <div class="book-spine-shadow" id="spineShadow"></div>
+                    </div>
+                    <div id="pageRight" class="notebook-page paper-dotted">
+                        <!-- Dynamic Daily Energy & Schedule Timeline Layer -->
+                        <div id="dailyScheduleLayer" class="daily-schedule-layer">
+                            <div class="schedule-header-bar">
+                                <div class="schedule-title-wrap">
+                                    <span class="sched-ico">⚡</span>
+                                    <span class="sched-title-text">Günlük Enerji & Plan Çizelgesi</span>
+                                </div>
+                                <button id="btnToggleSchedule" class="schedule-toggle-btn" title="Çizelgeyi Gizle/Göster">▼</button>
+                            </div>
+                            <div id="scheduleContent" class="schedule-content">
+                                <!-- SVG Energy Curve Background -->
+                                <svg id="energyCurveSvg" class="energy-curve-svg" preserveAspectRatio="none">
+                                    <defs>
+                                        <linearGradient id="energyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                            <stop offset="0%" stop-color="#5C784E" stop-opacity="0.25"/>
+                                            <stop offset="50%" stop-color="#e29578" stop-opacity="0.25"/>
+                                            <stop offset="100%" stop-color="#b5838d" stop-opacity="0.25"/>
+                                        </linearGradient>
+                                    </defs>
+                                    <path id="energyCurvePath" class="energy-curve-path" d="" />
+                                    <path id="energyWaveDashedPath" class="energy-wave-dashed-path" d="" />
+                                </svg>
+                                <!-- Dynamic Hourly Timeline Slots (08:00 to 23:00) -->
+                                <div id="scheduleTimelineSlots" class="schedule-timeline-slots"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!-- Floating Side Toggle for Task & Note Drawer -->
+            <button id="floatingDrawerTab" class="drawer-side-tab" title="Çekmeceyi Aç/Kapat">
+                📋 Çekmece
+            </button>
+
+            <!-- Right Slide-Out Sidebar Task & Sticky Note Drawer (#taskDrawer) -->
+            <div id="taskDrawer" class="task-drawer">
+                <div class="drawer-header">
+                    <div class="drawer-tabs">
+                        <button class="drawer-tab-btn active" data-tab="routines">🌸 Rutin Kartları</button>
+                        <button class="drawer-tab-btn" data-tab="stickies">📝 Not Kağıtları</button>
+                    </div>
+                    <button id="closeDrawerBtn" class="drawer-close-x" title="Kapat">&times;</button>
+                </div>
+
+                <!-- Tab Pane 1: 7 Cat Routine Cards -->
+                <div id="routinesTabPane" class="drawer-tab-pane active">
+                    <div class="drawer-pane-header">
+                        <span class="pane-ico">🐱</span>
+                        <div>
+                            <div class="pane-title">Günlük Rutin Kartları</div>
+                            <div class="pane-sub">Tamamlandığında bahçede çiçek açar!</div>
+                        </div>
+                    </div>
+                    <div class="cat-routines-list" id="catRoutinesList">
+                        <!-- Dynamic 7 Cat Routine Cards rendered here -->
+                    </div>
+                </div>
+
+                <!-- Tab Pane 2: Sticky Note Palette -->
+                <div id="stickiesTabPane" class="drawer-tab-pane">
+                    <div class="drawer-pane-header">
+                        <span class="pane-ico">📌</span>
+                        <div>
+                            <div class="pane-title">Deftere Not Kağıdı Yapıştır</div>
+                            <div class="pane-sub">Seçtiğiniz not kağıdı açık sayfaya serbest düşer</div>
+                        </div>
+                    </div>
+                    <div class="sticky-templates-grid" id="stickyTemplatesGrid">
+                        <!-- Dynamic 10 PNG Sticky Note Papers rendered here from not kağıtları/ -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Goodnotes Style Image Crop Modal (Rectangular & Freehand Lasso Crop) -->
+    <div id="cropModal" class="modal-backdrop">
+        <div class="modal-card crop-modal-card">
+            <button id="closeCropModalBtn" class="modal-close-x">&times;</button>
+            <div class="modal-header">
+                <span class="modal-icon">✂️</span>
+                <h3>Fotoğrafı Kırp</h3>
+            </div>
+            <div class="crop-mode-toggle">
+                <button id="cropModeLassoBtn" class="crop-mode-btn active">✏️ Serbest Kement (Lasso)</button>
+                <button id="cropModeRectBtn" class="crop-mode-btn">📐 Dikdörtgen Kırpma</button>
+            </div>
+            <div class="crop-canvas-container">
+                <canvas id="cropCanvas"></canvas>
+            </div>
+            <div class="crop-modal-footer">
+                <button id="btnResetCrop" class="cozy-btn-secondary">🔄 Sıfırla</button>
+                <button id="btnApplyCrop" class="cozy-btn-large" style="margin-top:0;">✨ Kırpmayı Tamamla</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Panda Pomodoro Timer Modal (FULLSCREEN) -->
+    <div id="pomodoroModal" class="pomodoro-fullscreen-modal">
+        <!-- Close Button (Minimalist ✕ at top right) -->
+        <button id="closePomodoroModalBtn" class="pomo-close-x" onclick="window.closePomodoroModal()">&times;</button>
+        
+        <div class="pomodoro-fullscreen-stage" id="pomodoroStage">
+            <!-- Fullscreen Stage Image -->
+            <img id="pomodoroFrameImg" src="panda pomodoro/2.png" alt="Panda Pomodoro" class="pomodoro-fullscreen-img" />
+
+            <!-- Step 1 Hotspot (Click anywhere on 2.png -> Step 2) -->
+            <div id="pomoCoverHotspot" class="pomo-fullscreen-click-layer">
+                
+            </div>
+
+            <!-- Step 2 Setup Overlay (Minimalist overlay over sarı.png) -->
+            <div id="pomoSetupOverlay" class="pomo-minimal-setup-overlay hidden">
+                <div class="pomo-minimal-setup-content cozy-time-settings-card">
+                    <div class="pomo-setup-row">
+                        <label>Odak Süresi:</label>
+                        <div class="pomo-inline-inputs">
+                            <input type="number" id="pomoWorkHours" min="0" max="12" value="0" /> <span>saat</span>
+                            <input type="number" id="pomoWorkMins" min="1" max="59" value="25" /> <span>dk</span>
+                        </div>
+                    </div>
+                    <div class="pomo-setup-row">
+                        <label>Mola Süresi:</label>
+                        <div class="pomo-inline-inputs">
+                            <input type="number" id="pomoBreakMins" min="1" max="60" value="5" /> <span>dk</span>
+                        </div>
+                    </div>
+                    <button id="btnSavePomoSetup" class="pomo-minimal-start-btn">
+                        Süreyi Onayla
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 3 Hotspot (Click START tomato on 3.png) -->
+            <div id="pomoStartTomatoHotspot" class="pomo-start-tomato-hotspot hidden" title="Başlat!"></div>
+
+            <!-- Minimal Countdown Timer Display -->
+            <div id="tomatoDigitalDisplay" class="pomo-minimal-digits-display hidden">
+                <span id="tomatoDigits">25:00</span>
+            </div>
+
+            <!-- Mola Ver Button (Shown during 5.png working screen) -->
+            <button id="btnStartBreak" class="pomo-minimal-break-btn hidden">☕ Mola Ver</button>
+
+            <!-- Step 7 Celebration Click Hotspot (Click on 8.png -> Step 8) -->
+            <div id="pomoCelebrationOverlay" class="pomo-fullscreen-click-layer hidden">
+                
+            </div>
+
+            <!-- Step 8 Finish Day Click Hotspot (Click on 9.png -> Close Modal) -->
+            <div id="pomoFinishDayOverlay" class="pomo-fullscreen-click-layer hidden">
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- MODULE 1: Rabbit Energy Profile Modal (Full-Bleed 16:9 Image Slider - 7 Steps) -->
+    <div id="energySetupModal" class="modal-backdrop">
+        <div class="modal-card energy-modal-card">
+            <button id="closeEnergyModalBtn" class="modal-close-x energy-close-x" onclick="window.closeEnergyModal()">&times;</button>
+
+            <!-- 16:9 Slide Viewport -->
+            <div class="energy-slider-viewport">
+                <div id="energySliderTrack" class="energy-slider-track">
+                    
+                    <!-- Step 0: Başlangıç (Cover) -->
+                    <div class="energy-slide-step slide-0" data-step="0">
+                        <div id="startCarrotBtn" class="start-carrot-btn" title="Teste Başla"></div>
+                    </div>
+
+                    <!-- Step 1: Biyolojik Ritim & Uyku Düzeni -->
+                    <div class="energy-slide-step slide-1" data-step="1">
+                        <div class="energy-option-group opt-s1-g1" data-param="weekendDiff">
+                            <button class="energy-pill-btn" data-val="sabit">Biyolojik Saat</button>
+                            <button class="energy-pill-btn" data-val="1-2_saat">1-2 Saat Keyif</button>
+                            <button class="energy-pill-btn" data-val="3_saat">Tam Kaotik</button>
+                        </div>
+                        <div class="energy-option-group opt-s1-g2" data-param="brainWake">
+                            <button class="energy-pill-btn" data-val="15_dk">Hemen Berrak</button>
+                            <button class="energy-pill-btn" data-val="30-45_dk">Kahve Süresi (30dk)</button>
+                            <button class="energy-pill-btn" data-val="1_saat">Uzun Isınma (1-2s)</button>
+                        </div>
+                        <div class="energy-option-group opt-s1-g3" data-param="wakeFeel">
+                            <button class="energy-pill-btn" data-val="fresh">Zinde & Hazır</button>
+                            <button class="energy-pill-btn" data-val="groggy">Ağır & Uykulu</button>
+                            <button class="energy-pill-btn" data-val="normal">Güneş Işığıyla</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Çalışma Düzeni & Odağı -->
+                    <div class="energy-slide-step slide-2" data-step="2">
+                        <div class="energy-option-group opt-s2-g1" data-param="workTempo">
+                            <button class="energy-pill-btn" data-val="derin_odak">Derin Odak</button>
+                            <button class="energy-pill-btn" data-val="iletisim">Yoğun İletişim</button>
+                            <button class="energy-pill-btn" data-val="yaratici">Yaratıcı & Dalgalı</button>
+                        </div>
+                        <div class="energy-option-group opt-s2-g2" data-param="workStyle">
+                            <button class="energy-pill-btn" data-val="sabit_mesai">Sabit Mesai</button>
+                            <button class="energy-pill-btn" data-val="esnek">Serbest / Kendi İşim</button>
+                            <button class="energy-pill-btn" data-val="hibrit">Parçalı Hibrit</button>
+                        </div>
+                        <div class="energy-option-group opt-s2-g3" data-param="distractTime">
+                            <button class="energy-pill-btn" data-val="sabah">Sabah Başlarken</button>
+                            <button class="energy-pill-btn" data-val="ogleden_sonra">Öğleden Sonra</button>
+                            <button class="energy-pill-btn" data-val="bolunmem">Pek Bölünmem</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Kafein & Beslenme Alışkanlıkları -->
+                    <div class="energy-slide-step slide-3" data-step="3">
+                        <div class="energy-option-group opt-s3-g1" data-param="firstCoffee">
+                            <button class="energy-pill-btn" data-val="uyaninca">Gözümü Açınca</button>
+                            <button class="energy-pill-btn" data-val="1-2_saat_sonra">1-2 Saat Sonra</button>
+                            <button class="energy-pill-btn" data-val="icmem">Kahve İçmem</button>
+                        </div>
+                        <div class="energy-option-group opt-s3-g2" data-param="lunchType">
+                            <button class="energy-pill-btn" data-val="hafif">Hafif / Atıştırmalık</button>
+                            <button class="energy-pill-btn" data-val="agir">Doyurucu Sıcak Tabak</button>
+                            <button class="energy-pill-btn" data-val="atlarim">Öğünü Atlarım</button>
+                        </div>
+                        <div class="energy-option-group opt-s3-g3" data-param="lastCaffeine">
+                            <button class="energy-pill-btn" data-val="14:00_oncesi">14:00 Kesin Sınır</button>
+                            <button class="energy-pill-btn" data-val="17:00_kadar">17:00'ye Kadar</button>
+                            <button class="energy-pill-btn" data-val="aksama_kadar">Akşam da İçerim</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: Gün İçi Kriz Noktaları & Çöküşler -->
+                    <div class="energy-slide-step slide-4" data-step="4">
+                        <div class="energy-option-group opt-s4-g1" data-param="dipRange">
+                            <button class="energy-pill-btn" data-val="13:30-15:00">Yemek Sonrası (13:30)</button>
+                            <button class="energy-pill-btn" data-val="15:00-16:30">İkindi Düşüşü (15:30)</button>
+                            <button class="energy-pill-btn" data-val="olmaz">Çöküş Yaşamam</button>
+                        </div>
+                        <div class="energy-option-group opt-s4-g2" data-param="energyDrain">
+                            <button class="energy-pill-btn" data-val="bildirimler">Bitmeyen Bildirimler</button>
+                            <button class="energy-pill-btn" data-val="toplantilar">Boş Toplantılar</button>
+                            <button class="energy-pill-btn" data-val="kararsizlik">Kararsızlık / Belirsizlik</button>
+                        </div>
+                        <div class="energy-option-group opt-s4-g3" data-param="secondWind">
+                            <button class="energy-pill-btn" data-val="19:00_canlanirim">Gece Canlanırım (20:00+)</button>
+                            <button class="energy-pill-btn" data-val="hobi">Sadece Sakin Hobi</button>
+                            <button class="energy-pill-btn" data-val="pilim_biter">Pil Tamamen Biter</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 5: Zihinsel Mod & Şarj Olma Yolu -->
+                    <div class="energy-slide-step slide-5" data-step="5">
+                        <div class="energy-option-group opt-s5-g1" data-param="breakStyle">
+                            <button class="energy-pill-btn" data-val="sessizlik">Tam Sessizlik</button>
+                            <button class="energy-pill-btn" data-val="yuruyus">Kısa Yürüyüş / Hava</button>
+                            <button class="energy-pill-btn" data-val="kedi">Kedi / Çay / Bitki</button>
+                        </div>
+                        <div class="energy-option-group opt-s5-g2" data-param="burnoutAction">
+                            <button class="energy-pill-btn" data-val="durdur">Beni Durdur</button>
+                            <button class="energy-pill-btn" data-val="5_dk_adim">Minik Adım Ver</button>
+                            <button class="energy-pill-btn" data-val="hatirlat">Nazikçe Hatırlat</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 6: Sonuçlar (Results) -->
+                    <div class="energy-slide-step slide-6" data-step="6">
+                        <div class="energy-result-content-wrap">
+                            <h3 class="result-title">Enerji Profiliniz</h3>
+                            <div class="result-summary-list">
+                                <div class="res-item"><span class="res-label">Zirve Saati:</span> <strong id="resPeakRange">09:00 - 12:00</strong></div>
+                                <div class="res-item"><span class="res-label">Çöküş Saati:</span> <strong id="resDipRange">15:00 - 16:30</strong></div>
+                                <div class="res-item"><span class="res-label">2. Rüzgar:</span> <strong id="resWindRange">19:00 - 21:00</strong></div>
+                            </div>
+                            <p class="result-sub" id="resAdviceText">Biyolojik saatinize göre oluşturulan çalışma planınız ajandanıza uygulanacaktır.</p>
+                            <button id="applyEnergyToScheduleBtn" class="result-apply-btn">✨ Ajandama Uygula</button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Floating Navigation Overlay Bar -->
+                <div class="energy-modal-footer">
+                    <button id="epPrevBtn" class="ep-nav-btn" style="visibility:hidden;">◀ Geri</button>
+                    <div class="energy-dots-wrap">
+                        <span class="energy-dot active" data-step="0"></span>
+                        <span class="energy-dot" data-step="1"></span>
+                        <span class="energy-dot" data-step="2"></span>
+                        <span class="energy-dot" data-step="3"></span>
+                        <span class="energy-dot" data-step="4"></span>
+                        <span class="energy-dot" data-step="5"></span>
+                        <span class="energy-dot" data-step="6"></span>
+                    </div>
+                    <button id="epNextBtn" class="ep-nav-btn">İleri ▶</button>
+                    <button id="epFinishBtn" class="ep-nav-btn ep-finish-btn" style="display:none;">Sonuçları Gör ✨</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODULE 3: Cat Routine Card Time Picker Popover -->
+    <div id="timePickerPopover" class="time-picker-popover hidden">
+        <div class="time-pop-header">
+            <span>⏰ Görev Saati Seçin</span>
+            <button id="closeTimePopBtn" class="pop-close-x">&times;</button>
+        </div>
+        <div class="time-pop-inputs">
+            <input type="number" id="timePopHour" min="8" max="22" value="14" />
+            <span>:</span>
+            <input type="number" id="timePopMin" min="0" max="45" step="15" value="00" />
+        </div>
+        <div class="time-pop-shortcuts">
+            <button class="pop-shortcut-btn" data-preset="peak">⚡ Zirve Saatim</button>
+            <button class="pop-shortcut-btn" data-preset="dip">☕ Mola Saatim</button>
+            <button class="pop-shortcut-btn" data-preset="evening">🌿 Akşam Rutinim</button>
+        </div>
+        <button id="btnAssignCardTime" class="cozy-btn-large" style="margin-top:8px;">Çizelgeye Ekle ✨</button>
+    </div>
+
+    <!-- MODULE 4: "Draw Your Own Flower" Task Reward Canvas Modal (Anna's Secret Garden) -->
+    <div id="flowerDrawModal" class="modal-backdrop">
+        <div class="modal-card flower-draw-card">
+            <button id="closeFlowerDrawModalBtn" class="modal-close-x" onclick="window.closeFlowerDrawModal()">&times;</button>
+            <div class="modal-header">
+                <span class="modal-icon">🌸</span>
+                <h3>Anna's Secret Garden</h3>
+            </div>
+            <p class="flower-draw-sub">Görevi tamamladın! Kendi çiçeğini çiz veya hızlı tohum ek!</p>
+
+            <div class="flower-canvas-wrap">
+                <canvas id="flowerCanvas" width="200" height="200"></canvas>
+            </div>
+
+            <div class="flower-palette-row">
+                <span class="palette-swatch active" data-color="#FFB7C5" style="background:#FFB7C5;" title="Pembe Pastel"></span>
+                <span class="palette-swatch" data-color="#FFE599" style="background:#FFE599;" title="Sarı Pastel"></span>
+                <span class="palette-swatch" data-color="#D7AAEF" style="background:#D7AAEF;" title="Leylak Pastel"></span>
+                <span class="palette-swatch" data-color="#A8C798" style="background:#A8C798;" title="Adaçayı Yeşili"></span>
+                <span class="palette-swatch" data-color="#FFAB91" style="background:#FFAB91;" title="Somon Pastel"></span>
+                <span class="palette-swatch" data-color="#FFFFFF" style="background:#FFFFFF; border:1px solid #ccc;" title="Beyaz"></span>
+            </div>
+
+            <div class="flower-actions-row">
+                <button id="btnUndoFlower" class="cozy-btn-secondary">🔄 Geri Al</button>
+                <button id="btnClearFlower" class="cozy-btn-secondary">🗑️ Temizle</button>
+                <button id="btnSkipFlowerDraw" class="cozy-btn-secondary">🌱 Hızlı Tohum</button>
+                <button id="btnPlantDrawnFlower" class="cozy-btn-large" style="margin-top:0; width:auto;">🌱 Plant</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Script -->
+    <script src="js/app.js?v=5.0"></script>
+</body>
+</html>
