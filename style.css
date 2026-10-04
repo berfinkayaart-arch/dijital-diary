@@ -3134,30 +3134,13 @@ select,
     }
 }
 
-/* Cozy Toast Notification */
-.cozy-toast-notification {
-    position: fixed;
-    bottom: 35px;
-    left: 50%;
-    transform: translateX(-50%) translateY(25px);
-    background: rgba(255, 249, 242, 0.96);
-    color: #4a3427;
-    border: 2px solid #e2c0a8;
-    padding: 11px 24px;
-    border-radius: 30px;
-    font-family: 'Fredoka', 'Outfit', sans-serif;
-    font-weight: 600;
-    font-size: 0.98rem;
-    box-shadow: 0 12px 30px rgba(74, 52, 39, 0.18);
-    z-index: 99999;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
+/* Cozy Toast Notification (Completely Disabled) */
+.cozy-toast-notification,
 .cozy-toast-notification.show {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
 }
 
 /* --- ADVANCED PEN & DRAWING TOOLBAR STYLES --- */

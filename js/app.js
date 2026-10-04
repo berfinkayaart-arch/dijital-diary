@@ -79,18 +79,8 @@ window.closeJournal = function() {
 };
 
 window.showCozyToast = function(message) {
-    let toast = document.getElementById('cozyToastNotification');
-    if (!toast) {
-        toast = document.createElement('div');
-        toast.id = 'cozyToastNotification';
-        toast.className = 'cozy-toast-notification';
-        document.body.appendChild(toast);
-    }
-    toast.textContent = message;
-    toast.classList.add('show');
-    setTimeout(() => {
-        toast.classList.remove('show');
-    }, 2800);
+    // Completely disabled per user request
+    return;
 };
 
 window.openPlantModal = function() {
