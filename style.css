@@ -940,9 +940,66 @@ body, html {
     justify-content: center;
     background: transparent !important;
     border-radius: 0;
-    overflow: hidden;
+    overflow: visible !important;
     position: relative;
     box-shadow: none !important;
+}
+
+/* Photo Quick Action Toolbar for direct rotate/crop/flip */
+.photo-action-toolbar {
+    position: absolute;
+    top: -42px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(43, 29, 20, 0.92);
+    backdrop-filter: blur(6px);
+    border: 1.5px solid rgba(226, 192, 168, 0.6);
+    border-radius: 20px;
+    padding: 3px 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+    z-index: 10000;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.scrapbook-canvas-item.is-selected .photo-action-toolbar,
+.scrapbook-canvas-item.selected .photo-action-toolbar {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.photo-action-btn {
+    background: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-family: var(--font-ui, sans-serif);
+    font-size: 0.72rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: background 0.2s, transform 0.15s;
+}
+
+.photo-action-btn:hover {
+    background: rgba(255, 255, 255, 0.35);
+    transform: scale(1.06);
+}
+
+.photo-action-btn.danger {
+    background: rgba(217, 83, 79, 0.85);
+}
+
+.photo-action-btn.danger:hover {
+    background: rgba(217, 83, 79, 1);
 }
 .raw-photo-card img {
     width: 100%;

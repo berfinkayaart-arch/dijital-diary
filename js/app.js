@@ -1979,10 +1979,61 @@ window.closePomodoroModal = function() {
             } else if (el.type === 'photo') {
                 const imgSrc = el.src || 'assets/flower_pink_blossom.png';
                 contentBox.innerHTML = `
+                    <div class="photo-action-toolbar">
+                        <button class="photo-action-btn btn-photo-rot" title="Döndür (Fareyle sürükleyin veya tıklayın)">🔄 Döndür</button>
+                        <button class="photo-action-btn btn-photo-crop" title="Serbest / Dikdörtgen Kırp">✂️ Kırp</button>
+                        <button class="photo-action-btn btn-photo-flipx" title="Yatay Çevir">↔️ Flip X</button>
+                        <button class="photo-action-btn btn-photo-flipy" title="Dikey Çevir">↕️ Flip Y</button>
+                        <button class="photo-action-btn danger btn-photo-del" title="Sil">✕ Sil</button>
+                    </div>
                     <div class="raw-photo-card">
                         <img src="${imgSrc}" alt="Anı Fotoğrafı" referrerpolicy="no-referrer" onerror="this.onerror=null; this.src='assets/flower_pink_blossom.png';" />
                     </div>
                 `;
+
+                const btnRot = contentBox.querySelector('.btn-photo-rot');
+                const btnCrop = contentBox.querySelector('.btn-photo-crop');
+                const btnFlipX = contentBox.querySelector('.btn-photo-flipx');
+                const btnFlipY = contentBox.querySelector('.btn-photo-flipy');
+                const btnDel = contentBox.querySelector('.btn-photo-del');
+
+                if (btnRot) {
+                    btnRot.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        el.rotation = ((el.rotation || 0) + 15) % 360;
+                        if (rotTooltip) rotTooltip.innerText = `${el.rotation}°`;
+                        node.style.transform = `rotate(${el.rotation}deg) scale(${el.flipX ? -1 : 1}, ${el.flipY ? -1 : 1})`;
+                        this.saveTargetContext(this.getTargetContext());
+                    });
+                }
+                if (btnCrop) {
+                    btnCrop.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        this.openCropModal(el);
+                    });
+                }
+                if (btnFlipX) {
+                    btnFlipX.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        el.flipX = !el.flipX;
+                        node.style.transform = `rotate(${el.rotation || 0}deg) scale(${el.flipX ? -1 : 1}, ${el.flipY ? -1 : 1})`;
+                        this.saveTargetContext(this.getTargetContext());
+                    });
+                }
+                if (btnFlipY) {
+                    btnFlipY.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        el.flipY = !el.flipY;
+                        node.style.transform = `rotate(${el.rotation || 0}deg) scale(${el.flipX ? -1 : 1}, ${el.flipY ? -1 : 1})`;
+                        this.saveTargetContext(this.getTargetContext());
+                    });
+                }
+                if (btnDel) {
+                    btnDel.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        this.deleteElement(el.id);
+                    });
+                }
             } else if (el.type === 'task') {
                 const cat = el.category || 'routine';
                 const catClass = `cat-${cat}`;
