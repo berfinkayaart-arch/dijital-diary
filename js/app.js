@@ -47,6 +47,30 @@ window.openBookPages = function() {
     }
 };
 
+window.prevPage = function() {
+    if (window.cozyApp && window.cozyApp.journal) {
+        window.cozyApp.journal.changeDate(-1);
+    }
+};
+
+window.nextPage = function() {
+    if (window.cozyApp && window.cozyApp.journal) {
+        window.cozyApp.journal.changeDate(1);
+    }
+};
+
+document.addEventListener('keydown', (e) => {
+    const journalModal = document.getElementById('journalModal');
+    if (!journalModal || !journalModal.classList.contains('is-open')) return;
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.isContentEditable) return;
+
+    if (e.key === 'ArrowLeft') {
+        window.prevPage();
+    } else if (e.key === 'ArrowRight') {
+        window.nextPage();
+    }
+});
+
 window.closeToCover = function() {
     try {
         sound.playPageFlip();

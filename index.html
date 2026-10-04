@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Fredoka:wght@600;700&family=Gaegu:wght@700&family=Marcellus&family=Outfit:wght@400;500;600;700&family=Shantell+Sans:wght@700;800&family=Sniglet:wght@800&display=swap" rel="stylesheet">
     
     <!-- Stylesheet -->
-    <link rel="stylesheet" href="style.css?v=7.0">
+    <link rel="stylesheet" href="style.css?v=8.0">
 </head>
     <!-- Main Interactive Layer: Garden Screen / Floating Island Scene -->
     <div id="gardenScreen" class="farm-scene-container garden-screen">
@@ -286,6 +286,12 @@
 
             <!-- 3D Accordion Book Stage -->
             <div class="book-scene is-open" id="bookScene">
+                <!-- Page Navigation Arrows (Previous / Next Day Page) -->
+                <button id="btnPrevPage" class="page-nav-arrow arrow-prev" title="Önceki Sayfaya Geç (Sol Yön Tuşu)" onclick="window.prevPage()">
+                    <span>◀</span>
+                    <span class="nav-arrow-label">Önceki Sayfa</span>
+                </button>
+
                 <!-- Inner Book Pages Container with Fan/Stack Edges & Monthly Bookmark Tabs -->
                 <div class="book-container" id="bookContainer">
                     <div class="fan-edge fan-edge-left"></div>
@@ -322,6 +328,11 @@
                         </div>
                     </div>
                 </div>
+
+                <button id="btnNextPage" class="page-nav-arrow arrow-next" title="Sonraki Sayfaya Geç (Sağ Yön Tuşu)" onclick="window.nextPage()">
+                    <span class="nav-arrow-label">Sonraki Sayfa</span>
+                    <span>▶</span>
+                </button>
             </div>
 
 

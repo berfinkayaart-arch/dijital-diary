@@ -695,6 +695,45 @@ body, html {
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.4);
 }
 
+/* Page Navigation Arrows (Previous / Next Page) */
+.page-nav-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: linear-gradient(135deg, #59351d, #3b200e);
+    color: #fcecd7;
+    border: 2px solid #8c5d3b;
+    border-radius: 30px;
+    padding: 12px 20px;
+    font-family: var(--font-ui, sans-serif);
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+    z-index: 1200;
+    transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    user-select: none;
+}
+
+.page-nav-arrow:hover {
+    transform: translateY(-50%) scale(1.08);
+    background: linear-gradient(135deg, #6e472a, #4a2b16);
+    border-color: #d4af37;
+    color: #ffffff;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+}
+
+.page-nav-arrow.arrow-prev {
+    left: 20px;
+}
+
+.page-nav-arrow.arrow-next {
+    right: 20px;
+}
+
 .transform-handles-container { display: none; }
 .scrapbook-canvas-item.is-selected .transform-handles-container,
 .scrapbook-canvas-item.selected .transform-handles-container,
